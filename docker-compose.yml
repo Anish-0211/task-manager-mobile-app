@@ -1,0 +1,20 @@
+# Docker Compose file for Task Manager App
+
+services:
+  task-manager:
+    build: .
+    ports:
+      - "3000:3000"
+    container_name: task-manager-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.example.description=Task Manager CRUD Application"
+      - "com.example.version=1.0.0"
