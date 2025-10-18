@@ -111,6 +111,132 @@ A simple React Native mobile application demonstrating CRUD (Create, Read, Updat
    http://localhost:3000
    ```
 
+## Building & Deployment
+
+### 🐳 Docker Build & Deployment
+
+#### Build Docker Image
+```bash
+# Build the Docker image
+docker build -t task-manager-app .
+
+# Run the container
+docker run -d -p 3000:3000 --name task-manager task-manager-app
+
+# View logs
+docker logs task-manager
+
+# Stop and remove container
+docker stop task-manager && docker rm task-manager
+```
+
+#### Docker Compose (Recommended)
+```bash
+# Build and run with compose
+docker compose up --build -d
+
+# View logs
+docker compose logs -f
+
+# Stop and cleanup
+docker compose down
+```
+
+### 📱 Android APK Build
+
+#### Prerequisites for APK Build
+- **Java 17** (OpenJDK recommended)
+- **Android SDK** with Build Tools
+- **Node.js** (>= 16)
+- **React Native CLI**
+
+#### Environment Setup
+```bash
+# Set Java 17 (adjust path as needed)
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+
+# Set Android SDK path
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+#### Build Debug APK
+```bash
+# Install dependencies
+npm install
+
+# Build debug APK
+cd android
+./gradlew assembleDebug
+
+# APK location: android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+#### Build Release APK
+```bash
+# Clean previous builds
+cd android
+./gradlew clean
+
+# Build release APK
+./gradlew assembleRelease
+
+# APK location: android/app/build/outputs/apk/release/app-release.apk
+```
+
+#### Install APK on Device/Emulator
+```bash
+# Install debug APK
+adb install android/app/build/outputs/apk/debug/app-debug.apk
+
+# Install release APK
+adb install android/app/build/outputs/apk/release/app-release.apk
+
+# Launch app
+adb shell am start -n com.taskmanagerapp/.MainActivity
+```
+
+### 🚀 Production Deployment Options
+
+#### 1. Web Version (Docker)
+```bash
+# Production build with Docker
+docker build -t task-manager-prod .
+docker run -d -p 80:3000 --name task-manager-prod task-manager-prod
+```
+
+#### 2. Android Distribution
+- **Debug APK**: For testing and development
+- **Release APK**: For production distribution
+- **Google Play Store**: Upload release APK for public distribution
+- **Firebase App Distribution**: For beta testing
+
+#### 3. CI/CD Pipeline Example
+```yaml
+# .github/workflows/build.yml
+name: Build APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+      - name: Build APK
+        run: |
+          npm install
+          cd android && ./gradlew assembleRelease
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+```
+
 ## Code Structure
 
 ```
@@ -171,13 +297,27 @@ This app was built to demonstrate:
 
 Perfect for showcasing mobile development skills in job applications!
 
-## Docker Benefits
+## Deployment Benefits
 
+### 🐳 Docker Advantages
 ✅ **Zero Setup** - Just run `docker compose up -d`  
 ✅ **Consistent Environment** - Works the same everywhere  
 ✅ **Professional Deployment** - Shows DevOps knowledge  
 ✅ **Easy Sharing** - Send the repo, run one command  
 ✅ **Production Ready** - Includes health checks and proper configuration
+
+### 📱 APK Distribution Benefits
+✅ **Native Performance** - Full React Native capabilities  
+✅ **Offline Functionality** - Works without internet connection  
+✅ **Device Integration** - Access to native Android features  
+✅ **Professional Distribution** - Ready for Google Play Store  
+✅ **Easy Installation** - Single APK file for direct install
+
+### 🚀 Multiple Deployment Options
+- **Web Version**: Instant demo via browser
+- **Docker Container**: Professional web deployment
+- **Android APK**: Native mobile distribution
+- **Development Build**: For testing and debugging
 
 ## License
 
