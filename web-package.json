@@ -1,0 +1,12 @@
+{
+  "name": "task-manager-web",
+  "version": "1.0.0",
+  "description": "Web version of Task Manager app for quick demo",
+  "main": "web/index.html",
+  "scripts": {
+    "web": "python3 -m http.server 3000",
+    "start": "python3 -m http.server 3000"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
