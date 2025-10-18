@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   StatusBar,
+  useColorScheme,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -25,6 +26,8 @@ const App = (): JSX.Element => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
 
   // Load tasks from storage on app start
   useEffect(() => {
@@ -133,76 +136,83 @@ const App = (): JSX.Element => {
   };
 
   const renderTask = ({item}: {item: Task}) => (
-    <View style={styles.taskItem}>
+    <View style={dynamicStyles.taskItem}>
       <TouchableOpacity
-        style={styles.taskContent}
+        style={dynamicStyles.taskContent}
         onPress={() => toggleTask(item.id)}>
-        <Text style={[styles.taskTitle, item.completed && styles.completed]}>
+        <Text style={[dynamicStyles.taskTitle, item.completed && dynamicStyles.completed]}>
           {item.title}
         </Text>
         {item.description ? (
-          <Text style={[styles.taskDescription, item.completed && styles.completed]}>
+          <Text style={[dynamicStyles.taskDescription, item.completed && dynamicStyles.completed]}>
             {item.description}
           </Text>
         ) : null}
-        <Text style={styles.taskDate}>
+        <Text style={dynamicStyles.taskDate}>
           {new Date(item.createdAt).toLocaleDateString()}
         </Text>
       </TouchableOpacity>
-      <View style={styles.taskActions}>
+      <View style={dynamicStyles.taskActions}>
         <TouchableOpacity
-          style={styles.editButton}
+          style={dynamicStyles.editButton}
           onPress={() => startEdit(item)}>
-          <Text style={styles.buttonText}>Edit</Text>
+          <Text style={dynamicStyles.buttonText}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.deleteButton}
+          style={dynamicStyles.deleteButton}
           onPress={() => deleteTask(item.id)}>
-          <Text style={styles.buttonText}>Delete</Text>
+          <Text style={dynamicStyles.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 
+  const dynamicStyles = createDynamicStyles(isDark);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
+    <SafeAreaView style={dynamicStyles.container}>
+      <StatusBar 
+        barStyle={isDark ? "light-content" : "dark-content"} 
+        backgroundColor={isDark ? "#1a1a1a" : "#f8f9fa"} 
+      />
       
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Task Manager</Text>
-        <Text style={styles.headerSubtitle}>
+      <View style={dynamicStyles.header}>
+        <Text style={dynamicStyles.headerTitle}>Task Manager</Text>
+        <Text style={dynamicStyles.headerSubtitle}>
           {tasks.length} tasks • {tasks.filter(t => t.completed).length} completed
         </Text>
       </View>
 
-      <View style={styles.form}>
+      <View style={dynamicStyles.form}>
         <TextInput
-          style={styles.input}
+          style={dynamicStyles.input}
           placeholder="Task title"
+          placeholderTextColor={isDark ? "#888" : "#999"}
           value={title}
           onChangeText={setTitle}
         />
         <TextInput
-          style={[styles.input, styles.textArea]}
+          style={[dynamicStyles.input, dynamicStyles.textArea]}
           placeholder="Description (optional)"
+          placeholderTextColor={isDark ? "#888" : "#999"}
           value={description}
           onChangeText={setDescription}
           multiline
           numberOfLines={2}
         />
-        <View style={styles.formActions}>
+        <View style={dynamicStyles.formActions}>
           {editingTask ? (
             <>
-              <TouchableOpacity style={styles.updateButton} onPress={updateTask}>
-                <Text style={styles.buttonText}>Update Task</Text>
+              <TouchableOpacity style={dynamicStyles.updateButton} onPress={updateTask}>
+                <Text style={dynamicStyles.buttonText}>Update Task</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.cancelButton} onPress={cancelEdit}>
-                <Text style={styles.buttonText}>Cancel</Text>
+              <TouchableOpacity style={dynamicStyles.cancelButton} onPress={cancelEdit}>
+                <Text style={dynamicStyles.buttonText}>Cancel</Text>
               </TouchableOpacity>
             </>
           ) : (
-            <TouchableOpacity style={styles.addButton} onPress={addTask}>
-              <Text style={styles.buttonText}>Add Task</Text>
+            <TouchableOpacity style={dynamicStyles.addButton} onPress={addTask}>
+              <Text style={dynamicStyles.buttonText}>Add Task</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -212,12 +222,12 @@ const App = (): JSX.Element => {
         data={tasks}
         keyExtractor={item => item.id}
         renderItem={renderTask}
-        style={styles.taskList}
+        style={dynamicStyles.taskList}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>No tasks yet</Text>
-            <Text style={styles.emptySubtext}>Add your first task above</Text>
+          <View style={dynamicStyles.emptyState}>
+            <Text style={dynamicStyles.emptyText}>No tasks yet</Text>
+            <Text style={dynamicStyles.emptySubtext}>Add your first task above</Text>
           </View>
         }
       />
@@ -225,40 +235,41 @@ const App = (): JSX.Element => {
   );
 };
 
-const styles = StyleSheet.create({
+const createDynamicStyles = (isDark: boolean) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: isDark ? '#1a1a1a' : '#f8f9fa',
   },
   header: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: isDark ? '#2d2d2d' : '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
+    borderBottomColor: isDark ? '#404040' : '#e9ecef',
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#212529',
+    color: isDark ? '#ffffff' : '#212529',
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6c757d',
+    color: isDark ? '#b0b0b0' : '#6c757d',
     marginTop: 4,
   },
   form: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: isDark ? '#2d2d2d' : '#fff',
     marginBottom: 10,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#dee2e6',
+    borderColor: isDark ? '#404040' : '#dee2e6',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
     marginBottom: 12,
-    backgroundColor: '#fff',
+    backgroundColor: isDark ? '#3a3a3a' : '#fff',
+    color: isDark ? '#ffffff' : '#000000',
   },
   textArea: {
     height: 80,
@@ -299,15 +310,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   taskItem: {
-    backgroundColor: '#fff',
+    backgroundColor: isDark ? '#2d2d2d' : '#fff',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: isDark ? '#000' : '#000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
+    shadowOpacity: isDark ? 0.3 : 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
@@ -317,17 +328,17 @@ const styles = StyleSheet.create({
   taskTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#212529',
+    color: isDark ? '#ffffff' : '#212529',
     marginBottom: 4,
   },
   taskDescription: {
     fontSize: 14,
-    color: '#6c757d',
+    color: isDark ? '#b0b0b0' : '#6c757d',
     marginBottom: 8,
   },
   taskDate: {
     fontSize: 12,
-    color: '#adb5bd',
+    color: isDark ? '#888888' : '#adb5bd',
   },
   completed: {
     textDecorationLine: 'line-through',
@@ -356,12 +367,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#6c757d',
+    color: isDark ? '#b0b0b0' : '#6c757d',
     marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 16,
-    color: '#adb5bd',
+    color: isDark ? '#888888' : '#adb5bd',
   },
 });
 
