@@ -73,35 +73,67 @@ A simple React Native mobile application demonstrating CRUD (Create, Read, Updat
 
 ### Option 2: Native React Native
 
-**Prerequisites:**
+#### Android Setup
 
+**Prerequisites:**
 - Node.js (>= 16)
 - React Native CLI
-- Android Studio (for Android) or Xcode (for iOS)
+- Android Studio
+- Java 17 (OpenJDK recommended)
+- Android SDK
 
-1. **Install dependencies:**
+**Environment Setup:**
+```bash
+# Set Java 17
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
 
-   ```bash
-   npm install
-   ```
-2. **Start Metro bundler:**
+# Set Android SDK
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
 
-   ```bash
-   npm start
-   ```
-3. **Run on device/emulator:**
+**Run on Android:**
+```bash
+# Install dependencies
+npm install
 
-   For Android:
+# Start Metro bundler
+npm start
 
-   ```bash
-   npm run android
-   ```
+# Run on Android (in new terminal)
+npm run android
+```
 
-   For iOS:
+#### iOS Setup
 
-   ```bash
-   npm run ios
-   ```
+**Prerequisites:**
+- macOS (required for iOS development)
+- Node.js (>= 16)
+- React Native CLI
+- Xcode (latest version)
+- CocoaPods
+
+**Run on iOS:**
+```bash
+# Install dependencies
+npm install
+
+# Install iOS dependencies
+cd ios && pod install && cd ..
+
+# Start Metro bundler
+npm start
+
+# Run on iOS Simulator (in new terminal)
+npm run ios
+
+# Or specify simulator
+npx react-native run-ios --simulator="iPhone 15"
+
+# Run on physical device
+npx react-native run-ios --device
+```
 
 ### Option 3: Web Version (Quick Demo)
 
@@ -149,10 +181,11 @@ docker compose logs -f
 docker compose down
 ```
 
-### 📱 Android APK Build
+### 📱 Mobile App Build
 
-#### Prerequisites for APK Build
+#### Android APK Build
 
+**Prerequisites:**
 - **Java 17** (OpenJDK recommended)
 - **Android SDK** with Build Tools
 - **Node.js** (>= 16)
@@ -209,6 +242,48 @@ adb install android/app/build/outputs/apk/release/app-release.apk
 adb shell am start -n com.taskmanagerapp/.MainActivity
 ```
 
+#### iOS App Build
+
+**Prerequisites:**
+- **macOS** (required for iOS development)
+- **Xcode** (latest version)
+- **Node.js** (>= 16)
+- **React Native CLI**
+- **CocoaPods**
+
+**Build for iOS Simulator:**
+```bash
+# Install dependencies
+npm install
+cd ios && pod install && cd ..
+
+# Build for simulator
+npx react-native run-ios --simulator="iPhone 15"
+```
+
+**Build for iOS Device:**
+```bash
+# Build for connected device
+npx react-native run-ios --device
+
+# Or build with Xcode for distribution
+# Open ios/TaskManagerApp.xcworkspace in Xcode
+# Select your team and provisioning profile
+# Build for Archive (Product > Archive)
+```
+
+**Create iOS Archive (for App Store):**
+```bash
+# Open Xcode project
+open ios/TaskManagerApp.xcworkspace
+
+# In Xcode:
+# 1. Select "Any iOS Device" or your connected device
+# 2. Product > Archive
+# 3. Distribute App > App Store Connect
+# 4. Upload to TestFlight/App Store
+```
+
 ### 🚀 Production Deployment Options
 
 #### 1. Web Version (Docker)
@@ -219,12 +294,19 @@ docker build -t task-manager-prod .
 docker run -d -p 80:3000 --name task-manager-prod task-manager-prod
 ```
 
-#### 2. Android Distribution
+#### 2. Mobile App Distribution
 
+**Android:**
 - **Debug APK**: For testing and development
 - **Release APK**: For production distribution
 - **Google Play Store**: Upload release APK for public distribution
 - **Firebase App Distribution**: For beta testing
+
+**iOS:**
+- **Development Build**: For testing on registered devices
+- **Ad Hoc Distribution**: For beta testing without App Store
+- **App Store**: For public distribution via Apple App Store
+- **TestFlight**: Apple's beta testing platform
 
 #### 3. CI/CD Pipeline Example
 
