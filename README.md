@@ -9,7 +9,9 @@ A simple React Native mobile application demonstrating CRUD (Create, Read, Updat
 ✅ **Update** - Edit existing tasks and toggle completion status  
 ✅ **Delete** - Remove tasks with confirmation dialog  
 ✅ **Persistence** - Data saved locally using AsyncStorage  
-✅ **Modern UI** - Clean, professional design with proper styling  
+✅ **Dark Mode** - Automatic theme adaptation with proper contrast  
+✅ **Custom Icon** - Professional app icon with task management theme  
+✅ **Modern UI** - Clean, professional design with consistent styling  
 
 ## Tech Stack
 
@@ -19,14 +21,28 @@ A simple React Native mobile application demonstrating CRUD (Create, Read, Updat
 - **React Hooks** (useState, useEffect)
 - **FlatList** for efficient list rendering
 
-## Screenshots
+## Screenshots & Demo
 
-The app includes:
-- Header with task count and completion statistics
-- Form for adding/editing tasks
-- Task list with completion toggle
-- Edit and delete actions for each task
-- Empty state when no tasks exist
+### 📱 App Features Showcase
+
+<div align="center">
+
+| Dark Mode Support | Task Management | Edit Functionality | Delete Confirmation |
+|:---:|:---:|:---:|:---:|
+| ![Dark Mode](screenshots/app-dark-mode.png) | ![Task List](screenshots/app-with-tasks-current.png) | ![Edit Task](screenshots/app-editing-task.png) | ![Delete Dialog](screenshots/app-delete-confirmation.png) |
+| Automatic dark/light theme | Create, view, and manage tasks | Edit existing tasks inline | Safe delete with confirmation |
+
+</div>
+
+### ✨ Key Features Demonstrated
+
+- **🌙 Dark Mode Support** - Automatically adapts to system theme with proper contrast
+- **📝 Complete CRUD Operations** - Create, Read, Update, Delete with intuitive UI
+- **✅ Task Status Management** - Toggle completion with visual feedback
+- **🎨 Professional UI/UX** - Clean, modern design with consistent styling
+- **💾 Data Persistence** - Tasks saved locally using AsyncStorage
+- **🔒 Safe Operations** - Confirmation dialogs for destructive actions
+- **📱 Native Performance** - Built with React Native for smooth interactions
 
 ## Quick Start
 
